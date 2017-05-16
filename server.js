@@ -6,7 +6,7 @@ var serveStatic = require('serve-static');
 
 var indexTemplate = require('./index.marko');
 var app = express();
-var port = 8080;
+var port = process.env.PORT || 8080;
 
 app.use('/static', serveStatic(__dirname + '/static'));
 
