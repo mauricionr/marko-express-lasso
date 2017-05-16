@@ -1,5 +1,6 @@
 {
    "dependencies": [
-       "../../../client/store.js"
+       "../../../client/js/store.js",
+       "../../../client/css/global.css"
    ]
  } 

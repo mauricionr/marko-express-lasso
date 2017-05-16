@@ -1,0 +1,19 @@
+body{
+    background-color: indigo;
+    color: #fff;
+    animation: change 5s infinite;
+}
+
+body a {
+    font-weight: bold;
+    color: #fff;
+}
+
+@keyframes change {
+    from{
+        background-color: indigo;
+    }
+    to{
+        background-color: #000;
+    }
+}
