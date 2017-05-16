@@ -3,12 +3,32 @@ require('marko/express'); //enable res.marko
 
 var express = require('express');
 var serveStatic = require('serve-static');
-
+var isProduction = process.env.NODE_ENV === 'production';
 var indexTemplate = require('./index.marko');
 var app = express();
 var port = process.env.PORT || 8080;
 
 app.use('/static', serveStatic(__dirname + '/static'));
+
+require('lasso').configure({
+  plugins: [
+    'lasso-marko' // Allow Marko templates to be compiled and transported to the browser
+  ],
+  outputDir: __dirname + '/static', // Place all generated JS/CSS/etc. files into the "static" dir
+  urlPrefix: __dirname + '/static', // Place all generated JS/CSS/etc. files into the "static" dir
+  bundlingEnabled: isProduction, // Only enable bundling in production
+  minify: isProduction, // Only minify JS and CSS code in production
+  fingerprintsEnabled: isProduction, // Only add fingerprints to URLs in production
+});
+
+app.use(require('lasso/middleware').serveStatic({
+  lasso: {
+    config: {
+      outputDir: __dirname + '/static',
+      urlPrefix: __dirname + '/static'
+    }
+  }
+}));
 
 app.get('/', function(req, res) {
     res.marko(indexTemplate, {
@@ -19,8 +39,6 @@ app.get('/', function(req, res) {
 });
 
 app.listen(port, function() {
-    console.log('Server started! Try it out:\nhttp://localhost:' + port + '/');
-
     if (process.send) {
         process.send('online');
     }
